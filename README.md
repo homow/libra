@@ -55,7 +55,7 @@ Built with **TypeScript + Express + MongoDB + Zod**, focusing on simplicity, sca
     ```bash
     npm run dev
     ```
-
+   
 ---
 
 ## 🔮 Future Plans
