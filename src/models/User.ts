@@ -10,7 +10,6 @@ const UserModelSchema: Schema<UserDB> = new mongoose.Schema(
         },
         email: {
             type: String,
-            unique: true,
             required: true,
         },
         age: {
@@ -28,6 +27,7 @@ UserModelSchema.index(
 );
 
 const UserModel: Model<UserDB> =
-    mongoose.models.User || mongoose.model<UserDB>("User", UserModelSchema);
+    mongoose.models.User
+    || mongoose.model<UserDB>("User", UserModelSchema);
 
 export default UserModel;
