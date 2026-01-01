@@ -33,31 +33,28 @@ Built with **TypeScript + Express + MongoDB + Zod**, focusing on simplicity, sca
 
 1. Clone the project:
 
-```bash
-git clone https://github.com/username/libra.git
-cd libra
-```
+    ```bash
+    git clone https://github.com/username/libra.git
+    ```
 
-1. Install dependencies:
+2. Install dependencies:
 
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
-1. Create `.env` file:
+3. Create `.env` file:
 
-```
-MONGO_URI=mongodb://localhost:27017/libra
-PORT=3000
-```
+    ```env
+   MONGO_URI=mongodb://localhost:27017/libra
+   PORT=3000
+    ```
 
-1. Run the project:
+4. Run the project:
 
-```bash
-npm run dev
-```
-
-The API will be available at: `http://localhost:3000/api/books`
+    ```bash
+    npm run dev
+    ```
 
 ---
 
