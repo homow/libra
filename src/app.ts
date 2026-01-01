@@ -66,8 +66,8 @@ app.post('/api/book',
 
         try {
             const existBook = await BookModel.findOne({
-                title: body.title,
-                author: body.author,
+                titleLower: body.title.toLowerCase(),
+                authorLower: body.author.toLowerCase(),
             });
 
             if (existBook) {
@@ -80,6 +80,8 @@ app.post('/api/book',
             const newBook = await BookModel.create({
                 ...body,
                 price: body.price ?? 0,
+                titleLower: body.title.toLowerCase(),
+                authorLower: body.author.toLowerCase(),
             });
 
             return res.status(201).json({

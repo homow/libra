@@ -22,6 +22,16 @@ const BookModelSchema: Schema<BookDB> = new mongoose.Schema(
             min: 0,
             required: false,
         },
+        titleLower: {
+            type: String,
+            required: true,
+            index: true,
+        },
+        authorLower: {
+            type: String,
+            required: true,
+            index: true,
+        }
     },
     {
         timestamps: true,
@@ -29,7 +39,7 @@ const BookModelSchema: Schema<BookDB> = new mongoose.Schema(
 );
 
 BookModelSchema.index(
-    {title: 1, author: 1},
+    {titleLower: 1, authorLower : 1},
     {
         unique: true, collation: {
             locale: "en", strength: 2
@@ -40,6 +50,9 @@ BookModelSchema.index(
 BookModelSchema.pre("save", async function() {
     this.title = this.title.replace(/\s+/g, " ");
     this.author = this.author.replace(/\s+/g, " ");
+
+    this.titleLower = this.title.toLowerCase();
+    this.authorLower  = this.author.toLowerCase();
 });
 
 const BookModel: Model<BookDB> =
