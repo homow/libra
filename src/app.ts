@@ -1,26 +1,33 @@
 import "@configs/db.js";
-import usersRouter from "@routes/users.js";
-import express, {type NextFunction} from 'express';
-import type {Express, Request, Response} from 'express';
+import express from 'express';
 import booksRouter from "@routes/books.js";
+import usersRouter from "@routes/users.js";
+import type {Express, Request, Response} from 'express';
+import validateGlobalBody from "@middleware/validateGlobalBody.js";
 
 const app: Express = express();
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
-app.use(
-    (err: unknown, _req: Request, res: Response, next: NextFunction) => {
-        if (err instanceof SyntaxError) {
-            return res.status(400).json({
-                ok: false,
-                message: "Invalid JSON",
-            });
-        }
-        return next(err);
-    }
-);
+// --- Global parsers ---
+app.use(express.json({
+    strict: true
+}));
+app.use(express.urlencoded({
+    extended: true
+}));
 
+// --- Routes ---
 app.use("/api/users", usersRouter);
 app.use("/api/books", booksRouter);
+
+// --- 404 handler ---
+app.use((_req: Request, res: Response) => {
+    return res.status(404).json({
+        ok: false,
+        message: "Not Found",
+    });
+});
+
+// --- Global error handler (JSON Syntax) ---
+app.use(validateGlobalBody);
 
 export default app;

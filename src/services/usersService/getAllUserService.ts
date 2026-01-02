@@ -14,7 +14,10 @@ export default async function getUserService(): Promise<ServiceReturnDataType> {
         }
     }]);
 
-    if (!users) {
+    if (
+        !users
+        || users.length <= 0
+    ) {
         return {
             status: 404,
             data: {
