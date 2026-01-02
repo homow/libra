@@ -1,6 +1,6 @@
-import type {ServiceReturnDataType} from "@src/types/index.js";
 import UserModel from "@src/models/User.js";
 import {getSafeUser} from "@lib/utils/userUtils.js";
+import type {ServiceReturnDataType} from "@src/types/index.js";
 
 export default async function deleteUserService(
     id: string
