@@ -7,6 +7,8 @@ import type {Express, Request, Response} from 'express';
 import {internalServerError} from "@lib/api/response.js";
 import {UserSchema, type UserInput} from "@src/validtaion/user.js";
 import {type BookInput, BookSchema} from "@src/validtaion/book.js";
+import mongoose from "mongoose";
+import {getSafeUser} from "@lib/utils/userUtils.js";
 
 const app: Express = express();
 app.use(express.json());
@@ -44,14 +46,7 @@ app.post('/api/user',
             return res.status(201).json({
                 ok: true,
                 message: "User created successfully",
-                user: {
-                    id: newUser._id.toString(),
-                    name: newUser.name,
-                    email: newUser.email,
-                    age: newUser.age,
-                    createdAt: newUser.createdAt.toISOString(),
-                    updatedAt: newUser.updatedAt.toISOString(),
-                },
+                user: getSafeUser(newUser),
             });
         } catch (_) {
             return internalServerError(res);
@@ -95,6 +90,54 @@ app.post('/api/book',
                     createdAt: newBook.createdAt.toISOString(),
                     updatedAt: newBook.updatedAt.toISOString(),
                 },
+            });
+        } catch (_) {
+            return internalServerError(res);
+        }
+    }
+);
+
+app.delete('/api/user/:id',
+    (req: Request, res: Response, next: NextFunction) => {
+        const id: string | undefined = req.params.id;
+
+        if (!id) {
+            return res.status(400).json({
+                ok: false,
+                message: "id is missing",
+            });
+        }
+
+        const isValid: boolean = mongoose.isValidObjectId(id);
+
+        if (!isValid) {
+            return res.status(400).json({
+                ok: false,
+                message: "Invalid format id",
+            });
+        }
+
+        return next();
+    },
+    async (req: Request, res: Response) => {
+        const id = req.params.id;
+
+        try {
+            const findUser = await UserModel.findOne({_id: id});
+
+            if (!findUser) {
+                return res.status(404).json({
+                    ok: false,
+                    message: "User does not exist",
+                });
+            }
+
+            await UserModel.deleteOne({_id: id});
+
+            res.status(200).json({
+                ok: true,
+                message: "User deleted successfully",
+                user: getSafeUser(findUser),
             });
         } catch (_) {
             return internalServerError(res);
