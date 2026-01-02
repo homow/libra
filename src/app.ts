@@ -1,4 +1,5 @@
 import "@configs/db.js";
+import cors from "cors";
 import express from 'express';
 import booksRouter from "@routes/books.js";
 import usersRouter from "@routes/users.js";
@@ -6,6 +7,9 @@ import type {Express, Request, Response} from 'express';
 import validateGlobalBody from "@middleware/validateGlobalBody.js";
 
 const app: Express = express();
+
+// --- Global-cors security ---
+app.use(cors());
 
 // --- Global parsers ---
 app.use(express.json({
