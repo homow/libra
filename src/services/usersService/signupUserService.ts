@@ -8,7 +8,7 @@ export default async function signupUserService(
 ): Promise<ServiceReturnDataType> {
     const user = await UserModel.findOne({
         email: body.email,
-    });
+    }).lean();
 
     if (user) {
         return {

@@ -5,9 +5,8 @@ import createBookController from "@controllers/booksController/createBook.js";
 
 const booksRouter = express.Router();
 
-booksRouter.post('/create',
-    validateBody(BookSchema),
-    createBookController
-);
+booksRouter
+    .route("/")
+    .post(validateBody(BookSchema), createBookController);
 
 export default booksRouter;
