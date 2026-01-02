@@ -1,5 +1,5 @@
 import mongoose, {type Model, type Schema} from "mongoose";
-import type {UserDB} from "@src/types/models/user.types.js";
+import {type UserDB, UserRole} from "@src/types/models/user.types.js";
 
 const UserModelSchema: Schema<UserDB> = new mongoose.Schema(
     {
@@ -16,6 +16,12 @@ const UserModelSchema: Schema<UserDB> = new mongoose.Schema(
             type: Number,
             required: true,
             min: 17,
+        },
+        role: {
+            type: String,
+            enum: Object.values(UserRole),
+            default: UserRole.USER,
+            required: true,
         }
     },
     {timestamps: true}
