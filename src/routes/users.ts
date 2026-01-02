@@ -4,38 +4,14 @@ import {validateBody} from "@middleware/paresBody.js";
 import {internalServerError} from "@lib/api/response.js";
 import express, {type Request, type Response} from 'express';
 import validateObjectId from "@middleware/validateObjectId.js";
-import {type UserInput, UserSchema} from "@src/validtaion/user.js";
+import {UserSchema} from "@src/validtaion/user.js";
+import signupUserController from "@controllers/usersController/signupUserController.js";
 
 const usersRouter = express.Router();
 
 usersRouter.post('/signup',
     validateBody(UserSchema),
-    async (req: Request<{}, {}, UserInput>, res: Response) => {
-        const parseBody = req.body;
-
-        try {
-            const user = await UserModel.findOne({
-                email: parseBody.email,
-            });
-
-            if (user) {
-                return res.status(409).json({
-                    ok: false,
-                    message: "User already exists",
-                });
-            }
-
-            const newUser = await UserModel.create(parseBody);
-
-            return res.status(201).json({
-                ok: true,
-                message: "User created successfully",
-                user: getSafeUser(newUser),
-            });
-        } catch (_) {
-            return internalServerError(res);
-        }
-    }
+    signupUserController
 );
 
 usersRouter.delete('/:id',
