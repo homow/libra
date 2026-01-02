@@ -5,11 +5,10 @@ import {getSafeUser} from "@lib/utils/userUtils.js";
 export default async function deleteUserService(
     id: string
 ): Promise<ServiceReturnDataType> {
-    const findUser = await UserModel.findOne({
-        _id: id
-    });
+    const deleteUser = await UserModel
+        .findByIdAndDelete(id);
 
-    if (!findUser) {
+    if (!deleteUser) {
         return {
             status: 404,
             data: {
@@ -19,14 +18,12 @@ export default async function deleteUserService(
         };
     }
 
-    await UserModel.deleteOne({_id: id});
-
     return {
         status: 200,
         data: {
             ok: true,
             message: "User deleted successfully",
-            user: getSafeUser(findUser),
+            user: getSafeUser(deleteUser),
         }
     };
 };
