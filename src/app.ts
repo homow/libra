@@ -19,6 +19,6 @@ app.use((err: unknown, _req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/api/users", usersRouter);
-app.use("/api/book", booksRouter);
+app.use("/api/books", booksRouter);
 
 export default app;
