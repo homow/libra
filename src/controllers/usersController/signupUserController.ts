@@ -1,9 +1,9 @@
 import type {Request, Response} from "express";
+import {signupUserService} from "@services/index.js";
 import type {UserInput} from "@src/validtaion/user.js";
 import {internalServerError} from "@lib/api/response.js";
-import signupUserService from "@services/usersService/signupUserService.js";
 
-export default async function signupUserController(
+export async function signupUserController(
     req: Request<{}, {}, UserInput>,
     res: Response
 ) {

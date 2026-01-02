@@ -1,7 +1,7 @@
 import UserModel from "@src/models/User.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
 
-export default async function getUserService(): Promise<ServiceReturnDataType> {
+export async function getAllUserService(): Promise<ServiceReturnDataType> {
     const users = await UserModel.aggregate([{
         $project: {
             _id: 0,

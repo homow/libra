@@ -2,7 +2,7 @@ import UserModel from "@src/models/User.js";
 import {getSafeUser} from "@lib/utils/userUtils.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
 
-export default async function deleteUserService(
+export async function deleteUserService(
     id: string
 ): Promise<ServiceReturnDataType> {
     const deleteUser = await UserModel
@@ -26,4 +26,4 @@ export default async function deleteUserService(
             user: getSafeUser(deleteUser),
         }
     };
-};
+}

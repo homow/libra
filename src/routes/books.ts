@@ -1,7 +1,7 @@
 import express from "express";
 import {BookSchema} from "@src/validtaion/book.js";
 import {validateBody} from "@middleware/paresBody.js";
-import createBookController from "@controllers/booksController/createBook.js";
+import {createBookController} from "@controllers/index.js";
 
 const booksRouter = express.Router();
 

@@ -1,9 +1,9 @@
-import type {UserInput} from "@src/validtaion/user.js";
 import UserModel from "@src/models/User.js";
 import {getSafeUser} from "@lib/utils/userUtils.js";
+import type {UserInput} from "@src/validtaion/user.js";
 import {type ServiceReturnDataType, UserRole} from "@src/types/index.js";
 
-export default async function signupUserService(
+export async function signupUserService(
     body: UserInput
 ): Promise<ServiceReturnDataType> {
     const user = await UserModel.findOne({

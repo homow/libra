@@ -1,11 +1,13 @@
-import type {ServiceReturnDataType} from "@src/types/index.js";
 import UserModel from "@src/models/User.js";
 import {getSafeUser} from "@lib/utils/userUtils.js";
+import type {ServiceReturnDataType} from "@src/types/index.js";
 
-export default async function getUserService(
-    id: string
+export async function getUserService(
+    id: string,
 ): Promise<ServiceReturnDataType> {
-    const user = await UserModel.findById(id);
+    const user = await UserModel
+        .findById(id)
+        .lean();
 
     if (!user) {
         return {
@@ -25,4 +27,4 @@ export default async function getUserService(
             user: getSafeUser(user)
         }
     };
-};
+}

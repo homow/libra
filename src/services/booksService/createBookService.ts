@@ -2,7 +2,7 @@ import BookModel from "@src/models/Book.js";
 import type {BookInput} from "@src/validtaion/book.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
 
-export default async function createBookService(
+export async function createBookService(
     body: BookInput
 ): Promise<ServiceReturnDataType> {
     const existBook = await BookModel

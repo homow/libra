@@ -1,12 +1,12 @@
 import type {Request, Response} from "express";
+import {getUserService} from "@services/index.js";
 import {internalServerError} from "@lib/api/response.js";
-import getUserService from "@services/usersService/getUserService.js";
 
-export default async function getUserController
+export async function getUserController
 (
     req: Request<{ id: string }>,
     res: Response,
-) {
+): Promise<void> {
     const {id} = req.params;
 
     try {
