@@ -11,6 +11,7 @@ export default async function getUserService(): Promise<ServiceReturnDataType> {
             name: 1,
             age: 1,
             email: 1,
+            role: 1
         }
     }]);
 
