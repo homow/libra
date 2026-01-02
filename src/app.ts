@@ -9,7 +9,10 @@ import validateGlobalBody from "@middleware/validateGlobalBody.js";
 const app: Express = express();
 
 // --- Global-cors security ---
-app.use(cors());
+app.use(cors({
+    origin: process.env.NODE_ENV === "production" ? "example.com" : "*",
+    credentials: true
+}));
 
 // --- Global parsers ---
 app.use(express.json({
