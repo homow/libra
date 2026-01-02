@@ -7,8 +7,8 @@ import type {Express, Request, Response} from 'express';
 import {internalServerError} from "@lib/api/response.js";
 import {UserSchema, type UserInput} from "@src/validtaion/user.js";
 import {type BookInput, BookSchema} from "@src/validtaion/book.js";
-import mongoose from "mongoose";
 import {getSafeUser} from "@lib/utils/userUtils.js";
+import validateObjectId from "@middleware/validateObjectId.js";
 
 const app: Express = express();
 app.use(express.json());
@@ -98,28 +98,8 @@ app.post('/api/book',
 );
 
 app.delete('/api/user/:id',
-    (req: Request, res: Response, next: NextFunction) => {
-        const id: string | undefined = req.params.id;
-
-        if (!id) {
-            return res.status(400).json({
-                ok: false,
-                message: "id is missing",
-            });
-        }
-
-        const isValid: boolean = mongoose.isValidObjectId(id);
-
-        if (!isValid) {
-            return res.status(400).json({
-                ok: false,
-                message: "Invalid format id",
-            });
-        }
-
-        return next();
-    },
-    async (req: Request, res: Response) => {
+    validateObjectId,
+    async (req: Request<{ id: string }>, res: Response) => {
         const id = req.params.id;
 
         try {
