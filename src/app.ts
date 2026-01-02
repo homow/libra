@@ -5,6 +5,7 @@ import booksRouter from "@routes/books.js";
 import usersRouter from "@routes/users.js";
 import type {Express, Request, Response} from 'express';
 import validateGlobalBody from "@middleware/validateGlobalBody.js";
+import {createPath} from "@configs/paths.js";
 
 const app: Express = express();
 
@@ -21,6 +22,20 @@ app.use(express.json({
 app.use(express.urlencoded({
     extended: true
 }));
+
+app.use(express.static(createPath("public")));
+
+// --- test ---
+app.get("/",
+    (_req: express.Request, res: express.Response) => {
+        return res.sendFile(createPath("src/views/home.html"));
+    }
+);
+app.get("/about",
+    (_req: express.Request, res: express.Response) => {
+        return res.sendFile(createPath("src/views/about.html"));
+    }
+);
 
 // --- Routes ---
 app.use("/api/users", usersRouter);
