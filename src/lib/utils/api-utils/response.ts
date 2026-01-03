@@ -1,4 +1,12 @@
+import type {Response} from "express";
 import type {UserDB} from "@src/types/index.js";
+
+export function internalServerError(res: Response) {
+    res.status(500).json({
+        ok: false,
+        error: "Internal Server Error"
+    });
+}
 
 export function getSafeUser(data: UserDB) {
     return {

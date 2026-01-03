@@ -3,9 +3,9 @@ import cors from "cors";
 import express from 'express';
 import booksRouter from "@routes/books.js";
 import usersRouter from "@routes/users.js";
+import {createPath} from "@configs/paths.js";
 import type {Express, Request, Response} from 'express';
 import validateGlobalBody from "@middleware/validateGlobalBody.js";
-import {createPath} from "@configs/paths.js";
 
 const app: Express = express();
 

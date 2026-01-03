@@ -1,7 +1,7 @@
 import type {Response, Request} from "express";
 import {createBookService} from "@services/index.js";
 import type {BookInput} from "@src/validtaion/book.js";
-import {internalServerError} from "@lib/api/response.js";
+import {internalServerError} from "@utils/api-utils/response.js";
 
 export async function createBookController(
     req: Request<{}, {}, BookInput>,

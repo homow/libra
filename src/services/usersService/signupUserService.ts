@@ -1,6 +1,6 @@
 import UserModel from "@src/models/User.js";
-import {getSafeUser} from "@lib/utils/userUtils.js";
 import type {UserInput} from "@src/validtaion/user.js";
+import {getSafeUser} from "@utils/api-utils/response.js";
 import {type ServiceReturnDataType, UserRole} from "@src/types/index.js";
 
 export async function signupUserService(

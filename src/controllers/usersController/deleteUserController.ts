@@ -1,5 +1,5 @@
 import type {Request, Response} from "express";
-import {internalServerError} from "@lib/api/response.js";
+import {internalServerError} from "@utils/api-utils/response.js";
 import {deleteUserService} from "@services/index.js";
 
 export async function deleteUserController(

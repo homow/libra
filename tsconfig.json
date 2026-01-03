@@ -51,6 +51,9 @@
       ],
       "@services/*": [
         "src/services/*"
+      ],
+      "@utils/*": [
+        "src/lib/utils/*"
       ]
     }
   },
