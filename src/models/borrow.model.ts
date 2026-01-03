@@ -20,7 +20,7 @@ const BorrowModelSchema: Schema<BorrowDB> = new mongoose.Schema({
     },
     returnedAt: {
         type: Date,
-        default: null,
+        default: () => new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
     },
 }, {
     timestamps: true
