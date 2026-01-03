@@ -15,7 +15,6 @@ export async function createBorrowController(
 
         return res.status(result.status).json(result.data);
     } catch (_) {
-        console.log(_);
         return internalServerError(res);
     }
 }
