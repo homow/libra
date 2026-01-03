@@ -11,7 +11,7 @@ const app: Express = express();
 
 // --- Global-cors security ---
 app.use(cors({
-    origin: process.env.NODE_ENV === "production" ? "example.com" : "*",
+    origin: process.env.NODE_ENV === "production" ? "example.com" : `http://localhost:${process.env.PORT}`,
     credentials: true
 }));
 
@@ -23,19 +23,8 @@ app.use(express.urlencoded({
     extended: true
 }));
 
+// Static files (CSS, images, JS)
 app.use(express.static(createPath("public")));
-
-// --- test ---
-app.get("/",
-    (_req: express.Request, res: express.Response) => {
-        return res.sendFile(createPath("src/views/home.html"));
-    }
-);
-app.get("/about",
-    (_req: express.Request, res: express.Response) => {
-        return res.sendFile(createPath("src/views/about.html"));
-    }
-);
 
 // --- Routes ---
 app.use("/api/users", usersRouter);
