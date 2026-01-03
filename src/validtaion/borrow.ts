@@ -11,4 +11,4 @@ const BorrowSchema = z.object({
     returnedAt: z.date().optional(),
 });
 
-export {BorrowSchema};
+export default BorrowSchema;

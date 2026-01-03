@@ -1,19 +1,24 @@
 import UserModel from "@src/models/User.model.js";
 
-export async function checkUserDB(id: string) {
+export async function checkUserDB(
+    {
+        id,
+        email
+    }: {
+        id?: string;
+        email?: string;
+    }
+) {
+    if (!email && !id) return null;
+
+    const query = [];
+
+    if (email) query.push({email});
+    if (id) query.push({_id: id});
+
     const user = await UserModel
-        .findOne({id})
+        .findOne({$or: query})
         .lean();
 
-    if (!user) {
-        return {
-            status: 404,
-            data: {
-                ok: false,
-                message: 'User not found',
-            }
-        };
-    }
-
-    return user;
+    return user || null;
 }

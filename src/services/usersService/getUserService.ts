@@ -1,13 +1,11 @@
-import UserModel from "@src/models/User.model.js";
 import {getSafeUser} from "@utils/api-utils/response.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
+import {checkUserDB} from "@utils/db-utils.js";
 
 export async function getUserService(
     id: string,
 ): Promise<ServiceReturnDataType> {
-    const user = await UserModel
-        .findById(id)
-        .lean();
+    const user = await checkUserDB({id});
 
     if (!user) {
         return {
