@@ -1,4 +1,4 @@
-import type {BorrowDB} from "@src/types/models/borrow.types.js";
+import type {BorrowDB} from "@src/types/index.js";
 import mongoose, {Types, type Schema, type Model} from "mongoose";
 
 const BorrowModelSchema: Schema<BorrowDB> = new mongoose.Schema({
@@ -20,7 +20,7 @@ const BorrowModelSchema: Schema<BorrowDB> = new mongoose.Schema({
     },
     returnedAt: {
         type: Date,
-        default: () => new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
+        default: null,
     },
 }, {
     timestamps: true
@@ -40,6 +40,6 @@ BorrowModelSchema.index(
 
 const BorrowModel: Model<BorrowDB> =
     mongoose.models.Borrow
-    || mongoose.model<BorrowDB>("Book", BorrowModelSchema);
+    || mongoose.model<BorrowDB>("Borrow", BorrowModelSchema);
 
 export default BorrowModel;

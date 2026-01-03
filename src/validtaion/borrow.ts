@@ -1,4 +1,4 @@
-import {z} from "zod";
+import z from "zod";
 import {Types} from "mongoose";
 
 const objectId = z.string().refine(
@@ -8,7 +8,7 @@ const objectId = z.string().refine(
 
 const BorrowSchema = z.object({
     userId: objectId,
-    returnedAt: z.date().optional(),
 });
 
-export default BorrowSchema;
+export type BorrowInput = z.infer<typeof BorrowSchema>;
+export {BorrowSchema};
