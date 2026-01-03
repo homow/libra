@@ -6,6 +6,7 @@ import usersRouter from "@routes/users.js";
 import {createPath} from "@configs/paths.js";
 import type {Express, Request, Response} from 'express';
 import validateGlobalBody from "@middleware/validateGlobalBody.js";
+import borrowRouter from "@routes/borrow.js";
 
 const app: Express = express();
 
@@ -29,6 +30,7 @@ app.use(express.static(createPath("public")));
 // --- Routes ---
 app.use("/api/users", usersRouter);
 app.use("/api/books", booksRouter);
+app.use("/api/borrow", borrowRouter);
 
 // --- 404 handler ---
 app.use((_req: Request, res: Response) => {

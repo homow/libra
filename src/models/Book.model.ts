@@ -31,6 +31,11 @@ const BookModelSchema: Schema<BookDB> = new mongoose.Schema(
             type: String,
             required: true,
             index: true,
+        },
+        isAvailable: {
+            type: Boolean,
+            required: true,
+            default: true,
         }
     },
     {

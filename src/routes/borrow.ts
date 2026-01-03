@@ -1,10 +1,13 @@
 import express from "express";
-import {BorrowSchema} from "@src/validtaion/borrow.js";
 import {validateBody} from "@middleware/paresBody.js";
+import {BorrowSchema} from "@src/validtaion/borrow.js";
 import {createBorrowController} from "@controllers/index.js";
+import validateObjectId from "@middleware/validateObjectId.js";
 
 const borrowRouter = express.Router();
 
 borrowRouter
-    .route("/")
-    .post(validateBody(BorrowSchema), createBorrowController);
+    .route("/:id")
+    .post(validateObjectId(), validateBody(BorrowSchema), createBorrowController);
+
+export default borrowRouter;

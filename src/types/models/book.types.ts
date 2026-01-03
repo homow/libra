@@ -6,4 +6,5 @@ export interface BookDB extends BaseDBType {
     titleLower: string;
     authorLower: string;
     price?: number;
+    isAvailable: boolean;
 }

@@ -1,15 +1,21 @@
 import type {Request, Response} from "express";
 import type {BorrowInput} from "@src/validtaion/borrow.js";
 import {internalServerError} from "@utils/api-utils/response.js";
+import {createBorrowService} from "@services/borrowService/createBorrowService.js";
 
 export async function createBorrowController(
-    req: Request<{}, {}, BorrowInput>,
+    req: Request<{ id: string }, {}, BorrowInput>,
     res: Response
 ) {
     try {
-        const body = req.body;
+        const {userId} = req.body;
+        const bookId: string = req.params.id;
 
+        const result = await createBorrowService(bookId, userId);
+
+        return res.status(result.status).json(result.data);
     } catch (_) {
+        console.log(_);
         return internalServerError(res);
     }
 }

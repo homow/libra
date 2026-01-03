@@ -1,6 +1,6 @@
 import {getSafeUser} from "@utils/api-utils/response.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
-import {checkUserDB} from "@utils/db-utils.js";
+import {checkUserDB} from "@utils/db-utils/user-utils.js";
 
 export async function getUserService(
     id: string,

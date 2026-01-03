@@ -1,15 +1,16 @@
 import BookModel from "@src/models/Book.model.js";
 import type {BookInput} from "@src/validtaion/book.js";
+import {checkBook} from "@utils/db-utils/book-utils.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
 
 export async function createBookService(
     body: BookInput
 ): Promise<ServiceReturnDataType> {
-    const existBook = await BookModel
-        .findOne({
-            titleLower: body.title.toLowerCase(),
-            authorLower: body.author.toLowerCase(),
-        });
+    const existBook = await checkBook({
+        titleLower: body.title.toLowerCase(),
+        authorLower: body.author.toLowerCase(),
+        useAnd: true
+    });
 
     if (existBook) {
         return {

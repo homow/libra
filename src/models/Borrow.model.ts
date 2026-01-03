@@ -5,18 +5,22 @@ const BorrowModelSchema: Schema<BorrowDB> = new mongoose.Schema({
     bookId: {
         type: Types.ObjectId,
         ref: "Book",
+        required: true,
     },
     userId: {
         type: Types.ObjectId,
         ref: "User",
+        required: true,
     },
     borrowedAt: {
         type: Date,
         default: Date.now,
+        required: true,
     },
     isReturned: {
         type: Boolean,
         default: false,
+        required: true,
     },
     returnedAt: {
         type: Date,
