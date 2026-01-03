@@ -1,4 +1,4 @@
-import UserModel from "@src/models/User.js";
+import UserModel from "@src/models/User.model.js";
 import {UserRole} from "@src/types/index.js";
 import type {Request, Response, NextFunction} from "express";
 

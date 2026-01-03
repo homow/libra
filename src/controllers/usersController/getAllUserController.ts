@@ -1,6 +1,6 @@
 import type {Response, Request} from "express";
-import {internalServerError} from "@utils/api-utils/response.js";
 import {getAllUserService} from "@services/index.js";
+import {internalServerError} from "@utils/api-utils/response.js";
 
 export async function getAllUserController(_: Request, res: Response) {
     try {

@@ -1,4 +1,4 @@
-import BookModel from "@src/models/Book.js";
+import BookModel from "@src/models/Book.model.js";
 import type {BookInput} from "@src/validtaion/book.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
 

@@ -1,4 +1,4 @@
-import UserModel from "@src/models/User.js";
+import UserModel from "@src/models/User.model.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
 
 export async function getAllUserService(): Promise<ServiceReturnDataType> {
