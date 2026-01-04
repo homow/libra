@@ -1,9 +1,9 @@
-import type {ServiceReturnDataType} from "@src/types/index.js";
+import BookModel from "@src/models/Book.model.js";
+import BorrowModel from "@src/models/Borrow.model.js";
 import {checkBook} from "@utils/db-utils/book-utils.js";
 import {checkUserDB} from "@utils/db-utils/user-utils.js";
-import BorrowModel from "@src/models/Borrow.model.js";
 import {getSafeBorrow} from "@utils/api-utils/response.js";
-import BookModel from "@src/models/Book.model.js";
+import type {ServiceReturnDataType} from "@src/types/index.js";
 
 export async function createBorrowService(
     bookId: string,

@@ -1,18 +1,10 @@
 import UserModel from "@src/models/User.model.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
+import {userProjectStage} from "@src/aggregations/user.aggregate.js";
 
 export async function getAllUserService(): Promise<ServiceReturnDataType> {
     const users = await UserModel.aggregate([{
-        $project: {
-            _id: 0,
-            id: {$toString: "$_id"},
-            createdAt: {$toString: "$createdAt"},
-            updatedAt: {$toString: "$updatedAt"},
-            name: 1,
-            age: 1,
-            email: 1,
-            role: 1
-        }
+        ...userProjectStage
     }]);
 
     if (

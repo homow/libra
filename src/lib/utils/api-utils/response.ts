@@ -1,5 +1,5 @@
 import type {Response} from "express";
-import type {BorrowDB, UserDB} from "@src/types/index.js";
+import type {BookDB, BorrowDB, UserDB} from "@src/types/index.js";
 
 export function internalServerError(res: Response, message?: string) {
     res.status(500).json({
@@ -15,6 +15,18 @@ export function getSafeUser(data: UserDB) {
         name: data.name,
         email: data.email,
         age: data.age,
+        createdAt: data.createdAt?.toISOString() || null,
+        updatedAt: data.updatedAt?.toISOString() || null,
+    };
+}
+
+export function getSafeBook(data: BookDB) {
+    return {
+        id: data._id.toString(),
+        title: data.title,
+        author: data.author,
+        price: data.price,
+        isAvailable: data.isAvailable,
         createdAt: data.createdAt?.toISOString() || null,
         updatedAt: data.updatedAt?.toISOString() || null,
     };
