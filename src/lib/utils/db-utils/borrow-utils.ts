@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import BorrowModel from "@src/models/Borrow.model.js";
-import {getSafeBorrow} from "@utils/api-utils/response.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
-import {bookProjectStage} from "@src/aggregations/book.aggregate.js";
-import {userProjectStage} from "@src/aggregations/user.aggregate.js";
+import {getBorrowAggregate} from "@src/aggregations/borrow.aggregate.js";
 
 interface Params {
     id?: string;
@@ -22,21 +20,14 @@ export async function checkBorrowDB(
 ) {
     if (!id && !bookId && !userId) return null;
 
-    let query = [];
-
-    if (id) query.push({_id: id});
-    if (bookId) query.push({bookId});
-    if (userId) query.push({userId});
-
-    const mongoQuery = useAnd
-        ? {$and: query}
-        : {$or: query};
+    const filter = {
+        userId,
+        bookId,
+        id
+    };
 
     const borrow = await BorrowModel
-        .findOne(mongoQuery)
-        .lean()
-        .populate("bookId")
-        .populate("userId");
+        .aggregate(getBorrowAggregate(filter, useAnd));
 
     return borrow || null;
 }
@@ -56,7 +47,7 @@ export async function getOneBorrow(
         };
     }
 
-    const borrow = await checkBorrowDB({id});
+    const borrow = await checkBorrowDB({id, useAnd: false});
 
     if (borrow) {
         return {
@@ -64,7 +55,7 @@ export async function getOneBorrow(
             data: {
                 ok: true,
                 message: "borrow successfully found",
-                borrow: getSafeBorrow(borrow)
+                borrow
             }
         };
     }
@@ -79,47 +70,8 @@ export async function getOneBorrow(
 }
 
 export async function getBorrows(): Promise<ServiceReturnDataType> {
-    const borrows = await BorrowModel.aggregate([
-        {
-            $lookup: {
-                from: "users",
-                let: {userId: "$userId"},
-                pipeline: [{
-                    $match: {
-                        $expr: {$eq: ["$_id", "$$userId"]}
-                    }
-                }, userProjectStage],
-                as: "user"
-            }
-        },
-        {
-            $lookup: {
-                from: "books",
-                let: {bookId: "$bookId"},
-                pipeline: [{
-                    $match: {
-                        $expr: {$eq: ["$_id", "$$bookId"]}
-                    }
-                }, bookProjectStage],
-                as: "book"
-            }
-        },
-        {$unwind: "$user"},
-        {$unwind: "$book"},
-        {
-            $project: {
-                _id: 0,
-                id: {$toString: "$_id"},
-                user: 1,
-                book: 1,
-                borrowedAt: 1,
-                returnedAt: 1,
-                isReturned: 1,
-                createdAt: {$toString: "$createdAt"},
-                updatedAt: {$toString: "$updatedAt"}
-            }
-        }
-    ]);
+    const borrows = await BorrowModel
+        .aggregate(getBorrowAggregate());
 
     return {
         status: 200,
