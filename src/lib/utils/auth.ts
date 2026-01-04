@@ -51,9 +51,16 @@ function verifyToken(
     }
 }
 
+function decodeToken(
+    token: string
+): string | JwtPayload | null {
+    return jwt.decode(token);
+}
+
 export {
     generateToken,
     hashSecret,
     compareSecret,
-    verifyToken
+    verifyToken,
+    decodeToken,
 };
