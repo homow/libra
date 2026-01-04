@@ -1,9 +1,11 @@
+import mongoose from "mongoose";
 import BookModel from "@src/models/Book.model.js";
 import BorrowModel from "@src/models/Borrow.model.js";
 import {checkBook} from "@utils/db-utils/book-utils.js";
 import {checkUserDB} from "@utils/db-utils/user-utils.js";
-import {getSafeBorrow} from "@utils/api-utils/response.js";
 import type {ServiceReturnDataType} from "@src/types/index.js";
+import {userProjectStage} from "@src/aggregations/user.aggregate.js";
+import {bookProjectStage} from "@src/aggregations/book.aggregate.js";
 
 export async function createBorrowService(
     bookId: string,
@@ -47,17 +49,73 @@ export async function createBorrowService(
         };
     }
 
-    const newBorrow = await BorrowModel
-        .create({bookId, userId});
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-    await BookModel.findByIdAndUpdate(bookId, {isAvailable: false});
+    try {
+        const newBorrow = await BorrowModel
+            .create({bookId, userId});
 
-    return {
-        status: 201,
-        data: {
-            ok: true,
-            message: "Borrow successfully created",
-            borrow: getSafeBorrow(newBorrow),
-        }
-    };
+        await BookModel.findByIdAndUpdate(bookId, {isAvailable: false});
+
+        const borrow = await BorrowModel.aggregate([
+            {
+                $match: {_id: new mongoose.Types.ObjectId(newBorrow._id)}
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    let: {userId: "$userId"},
+                    pipeline: [
+                        {$match: {$expr: {$eq: ["$_id", "$$userId"]}}},
+                        userProjectStage
+                    ],
+                    as: "user"
+                }
+            },
+            {
+                $lookup: {
+                    from: "books",
+                    let: {bookId: "$bookId"},
+                    pipeline: [
+                        {$match: {$expr: {$eq: ["$_id", "$$bookId"]}}},
+                        bookProjectStage
+                    ],
+                    as: "book"
+                }
+            },
+            {$unwind: "$user"},
+            {$unwind: "$book"},
+            {
+                $project: {
+                    _id: 0,
+                    id: {$toString: "$_id"},
+                    user: 1,
+                    book: 1,
+                    borrowedAt: 1,
+                    returnedAt: 1,
+                    isReturned: 1,
+                    createdAt: {$toString: "$createdAt"},
+                    updatedAt: {$toString: "$updatedAt"}
+                }
+            }
+        ]);
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return {
+            status: 201,
+            data: {
+                ok: true,
+                message: "Borrow successfully created",
+                borrow
+            }
+        };
+
+    } catch (_) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw _;
+    }
 }
