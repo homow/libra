@@ -53,14 +53,17 @@ export async function createBorrowService(
     session.startTransaction();
 
     try {
-        const newBorrow = await BorrowModel
-            .create({bookId, userId});
+        const [borrowDoc] = await BorrowModel
+            .create([{bookId, userId}], {session});
 
-        await BookModel.findByIdAndUpdate(bookId, {isAvailable: false});
+        await BookModel
+            .findByIdAndUpdate(bookId, {isAvailable: false}, {session});
 
-        const borrow = await BorrowModel.aggregate([
+        const [borrow] = await BorrowModel.aggregate([
             {
-                $match: {_id: new mongoose.Types.ObjectId(newBorrow._id)}
+                $match: {
+                    _id: new mongoose.Types.ObjectId(borrowDoc?._id)
+                }
             },
             {
                 $lookup: {
@@ -99,7 +102,7 @@ export async function createBorrowService(
                     updatedAt: {$toString: "$updatedAt"}
                 }
             }
-        ]);
+        ]).session(session);
 
         await session.commitTransaction();
         await session.endSession();
