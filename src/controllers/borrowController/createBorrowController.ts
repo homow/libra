@@ -1,7 +1,7 @@
 import type {Request, Response} from "express";
+import {createBorrowService} from "@services/index.js";
 import type {BorrowInput} from "@src/validtaion/borrow.js";
 import {internalServerError} from "@utils/api-utils/response.js";
-import {createBorrowService} from "@services/index.js";
 
 export async function createBorrowController(
     req: Request<{ id: string }, {}, BorrowInput>,

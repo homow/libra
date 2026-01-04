@@ -1,4 +1,5 @@
 import type {BaseDBType} from "./common.js";
+import type {CommentDB} from "@src/types/index.js";
 
 export interface BookDB extends BaseDBType {
     title: string;
@@ -7,4 +8,5 @@ export interface BookDB extends BaseDBType {
     authorLower: string;
     price?: number;
     isAvailable: boolean;
+    comments: CommentDB[];
 }

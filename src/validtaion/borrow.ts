@@ -1,13 +1,8 @@
 import z from "zod";
-import {Types} from "mongoose";
-
-const objectId = z.string().refine(
-    (val) => Types.ObjectId.isValid(val),
-    {message: "Invalid user id"}
-);
+import {checkZodObjectId} from "@utils/helper.js";
 
 const BorrowSchema = z.object({
-    userId: objectId,
+    userId: checkZodObjectId("user"),
 });
 
 export type BorrowInput = z.infer<typeof BorrowSchema>;

@@ -36,15 +36,24 @@ const BookModelSchema: Schema<BookDB> = new mongoose.Schema(
             type: Boolean,
             required: true,
             default: true,
-        }
+        },
     },
     {
         timestamps: true,
     }
 );
 
+BookModelSchema.virtual("comments", {
+    ref: "Comment",
+    localField: "_id",
+    foreignField: "book",
+});
+
+BookModelSchema.set("toObject", {virtuals: true});
+BookModelSchema.set("toJSON", {virtuals: true});
+
 BookModelSchema.index(
-    {titleLower: 1, authorLower : 1},
+    {titleLower: 1, authorLower: 1},
     {
         unique: true, collation: {
             locale: "en", strength: 2
@@ -52,12 +61,12 @@ BookModelSchema.index(
     }
 );
 
-BookModelSchema.pre("save", async function() {
+BookModelSchema.pre("save", async function () {
     this.title = this.title.replace(/\s+/g, " ");
     this.author = this.author.replace(/\s+/g, " ");
 
     this.titleLower = this.title.toLowerCase();
-    this.authorLower  = this.author.toLowerCase();
+    this.authorLower = this.author.toLowerCase();
 });
 
 const BookModel: Model<BookDB> =
