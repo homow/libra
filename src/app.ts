@@ -8,6 +8,7 @@ import borrowRouter from "@routes/borrow.js";
 import commentRoutes from "@routes/comments.js";
 import type {Express, Request, Response} from 'express';
 import validateGlobalBody from "@middleware/validateGlobalBody.js";
+import globalInternalServerError from "@middleware/globalInternalServerError.js";
 
 const app: Express = express();
 
@@ -43,6 +44,9 @@ app.use((_req: Request, res: Response) => {
         message: "Not Found",
     });
 });
+
+// internal server error handler
+app.use(globalInternalServerError);
 
 // --- Global error handler (JSON Syntax) ---
 app.use(validateGlobalBody);
