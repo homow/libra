@@ -1,12 +1,12 @@
-import type {ServiceReturnDataType} from "@src/types/index.js";
 import BookModel from "@src/models/Book.model.js";
+import type {ServiceReturnDataType} from "@src/types/index.js";
 
 export async function getBookService(
 
 ): Promise<ServiceReturnDataType> {
     const books = await BookModel
         .find({})
-        .populate("comments");
+        .populate("comments", "-__v");
 
     if (!books) {
         return {
@@ -18,10 +18,14 @@ export async function getBookService(
         };
     }
 
+    console.log(typeof books[0]?.createdAt);
+    console.log(books[0]?.createdAt instanceof Date);
+    console.log(books);
+
     return {
         status: 200,
         data: {
-            ok: false,
+            ok: true,
             message: "Successfully retrieved books",
             books
         }

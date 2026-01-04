@@ -50,7 +50,19 @@ BookModelSchema.virtual("comments", {
 });
 
 BookModelSchema.set("toObject", {virtuals: true});
-BookModelSchema.set("toJSON", {virtuals: true});
+BookModelSchema.set("toJSON", {
+    virtuals: true,
+    transform: (_doc, ret) => {
+        delete ret.__v;
+        ret.createdAt = ret.createdAt instanceof Date
+            ? ret.createdAt.toISOString()
+            : ret.createdAt;
+        ret.updatedAt = ret.updatedAt instanceof Date
+            ? ret.updatedAt.toISOString()
+            : ret.updatedAt;
+        return ret;
+    }
+});
 
 BookModelSchema.index(
     {titleLower: 1, authorLower: 1},

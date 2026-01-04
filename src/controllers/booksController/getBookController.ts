@@ -1,6 +1,6 @@
 import type {Request, Response} from "express";
-import {internalServerError} from "@utils/api-utils/response.js";
 import {getBookService} from "@src/services/index.js";
+import {internalServerError} from "@utils/api-utils/response.js";
 
 export async function getBookController(
     _req: Request,
