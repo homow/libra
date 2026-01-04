@@ -7,6 +7,7 @@ import {createPath} from "@configs/paths.js";
 import borrowRouter from "@routes/borrow.js";
 import commentRoutes from "@routes/comments.js";
 import type {Express, Request, Response} from 'express';
+import {middlewareUploader} from "@middleware/multer.js";
 import validateGlobalBody from "@middleware/validateGlobalBody.js";
 
 const app: Express = express();
@@ -35,6 +36,16 @@ app.use("/api/users", usersRouter);
 app.use("/api/books", booksRouter);
 app.use("/api/borrow", borrowRouter);
 app.use("/api/comments", commentRoutes);
+app.post("/api/file",
+    middlewareUploader(),
+    (req, res) => {
+        return res.status(200).json({
+            ok: true,
+            message: "Successfully uploaded",
+            file: req.file
+        });
+    }
+);
 
 // --- 404 handler ---
 app.use((_req: Request, res: Response) => {
